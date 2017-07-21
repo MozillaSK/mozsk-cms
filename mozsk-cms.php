@@ -42,7 +42,7 @@ function get_newprodukt($produkt, $what) {
 	return htmlspecialchars($result);
 }
 
-function get_dlpage($produkt) {
+function get_dlpage_content($produkt) {
 
   	global $wpdb;
   	
@@ -72,12 +72,16 @@ function get_dlpage($produkt) {
 	  }*/
 	$result .= '</ul>';
 
-	echo $result;
+	return $result;
 
 }
 
+function get_dlpage($produkt) {
+	echo get_dlpage_content($produkt);
+}
+
 function get_dlpage_shortcode($atts) {
-	get_dlpage($atts['produkt']);
+	return get_dlpage_content($atts['produkt']);
 }
 add_shortcode( 'get-dlpage', 'get_dlpage_shortcode' );
 
