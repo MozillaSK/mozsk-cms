@@ -2,92 +2,63 @@
 /*
 Plugin Name: Mozilla.sk CMS Plugin
 Plugin URI: http://www.mozilla.sk
-Description: CMS plugin for Mozilla.sk and Mozilla.cz
-Author: wladow & JasnaPaka
+Description: CMS plugin pre stránky Mozilla.sk
+Author: wladow
 Version: 0.5.6
 Author URI: http://www.wladow.sk
 */
 
-require_once("config.php");
-
-/**
- * Return latest version of Mozilla application.
- * 
- * $product - product name (all characters are lowercase)
- */ 
-function get_product_version($product) {
-	global $wpdb;
-	
-	$result = $wpdb->get_var("SELECT verzia FROM mozsk_produkty WHERE urlid='$product' ORDER BY id DESC ");
-	return htmlspecialchars($result);
-}
-
-/**
- * Return url to release notes for latest version of Mozilla application.
- * 
- * $product - product name (all characters are lowercase)
- */ 
-function get_product_rn($product) {
-	global $wpdb;
-	
-	$result = $wpdb->get_var("SELECT changelog FROM mozsk_produkty WHERE urlid='$product' ORDER BY id DESC ");
-	return htmlspecialchars($result);
-}
-
-/**
- * Return download link for latest version of Mozilla application and operation system.
- * 
- * $product - product name (all characters are lowercase)
- * $os      - "win", "lin" or "mac" 
- */ 
-function get_product_link($product, $os) {
-	global $wpdb;
-
-	$result = $wpdb->get_var("SELECT verzia FROM mozsk_produkty WHERE urlid='$product' ORDER BY id DESC ");
-	$result = $wpdb->get_var("SELECT download_$os FROM mozsk_produkty WHERE urlid='$product' AND verzia='$result'");
-
-	return htmlspecialchars($result);
-}
-
-function moz_download_rn_handler($atts) {
-	return get_product_rn($atts["app"]);
-}
-
-function moz_download_version_handler($atts) {
-	return get_product_version ($atts["app"]);
-}
-
-function moz_download_url_handler($atts) {
-	return get_product_link ($atts["app"], $atts["platform"]);
-}
 
 function get_newprodukt($produkt, $what) {
 
   	global $wpdb;
   	
-  	 $result = $wpdb->get_var("SELECT verzia FROM mozsk_produkty WHERE urlid='$produkt' ORDER BY id DESC ");
+    $result = $wpdb->get_var("SELECT verzia 
+      FROM mozsk_produkty 
+      WHERE urlid = '$produkt' 
+      ORDER by id DESC
+/*        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
+        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC, 
+        LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC */
+      ");
   	if ($what == 'link' ) {
   	 $agent=$_SERVER["HTTP_USER_AGENT"];
   	 $os='win';
   	   if (strstr($agent,"Mac")) $os='mac'; elseif (strstr($agent,"Linux")) $os='lin';
-  	 $result = $wpdb->get_var("SELECT download_$os FROM mozsk_produkty WHERE urlid='$produkt' AND verzia='$result'");
-  	 }
+     if ($produkt == "mozilla-sunbird") {
+  	   $link = $wpdb->get_var("SELECT download_$os FROM mozsk_produkty WHERE urlid='$produkt' AND verzia='$result'");
+     } else {
+       if ($os == "mac") {
+         $os = "osx";
+       }
+       if ($os == "lin") {
+         $os = $os . 'ux';
+       }
+       $link = "http://download.mozilla.org/?product=$produkt-$result&os=$os&lang=sk";
+     }
+	   return htmlspecialchars($link);
+  	}
 
 	return htmlspecialchars($result);
 }
-
 
 function get_dlpage($produkt) {
 
   	global $wpdb;
   	
   	$result='<p><strong>Verzia: ';
-  	$temp_prod = $wpdb->get_row("SELECT verzia, datum, changelog, download_win, velkwin,
-			download_lin,velklin,download_mac,velkmac,download_port,velkport FROM mozsk_produkty WHERE urlid='$produkt' ORDER BY id DESC LIMIT 1");
+  	$temp_prod = $wpdb->get_row("SELECT verzia, datum, changelog, download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport 
+      FROM mozsk_produkty 
+      WHERE urlid='$produkt' 
+      ORDER BY 
+        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
+        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC, 
+        LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC 
+      LIMIT 1");
 	$result .= $temp_prod->verzia.'</strong><br/>';
-	$result .= __('released', MOZ_DOMAIN).': '.date("d.m.Y",strtotime($temp_prod->datum)).' - <a href="'.$temp_prod->changelog.'"';
+	$result .= 'Vydané: '.date("d.m.Y",strtotime($temp_prod->datum)).' - <a href="'.$temp_prod->changelog.'"';
   if (strpos($temp_prod->changelog,'/sk/') == 0) $result .= ' hreflang="en"';
-  $result .= '>'.__('release notes', MOZ_DOMAIN).'</a></p>';
+  $result .= '>poznámky k vydaniu</a></p>';
 
 	$result .= '<ul>
 		<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_win).'">Windows <small>(.exe)</small></a> ('.$temp_prod->velkwin.' МB)</li>
@@ -121,9 +92,9 @@ function get_archiv($produkt) {
 			if ($prvy==1) { $result .= '<div class="arch '.$produkt.'_arch">'; $prvy=0;} else $result .= '<div class="arch">';
 			
 			    $result .= '<h1><a href="/'.$produkt.'/">'.$prod->nazov.' '.$prod->verzia.'</a></h1>';
-				$result .= '<p class="description">'.__('released', MOZ_DOMAIN).': '.date("d.m.Y",strtotime($prod->datum)).' - <a href="'.$prod->changelog.'"';
+				$result .= '<p class="description">vydané: '.date("d.m.Y",strtotime($prod->datum)).' - <a href="'.$prod->changelog.'"';
         if (strpos($prod->changelog,'/sk/') == 0) $result .= ' hreflang="en"';
-        $result .= '>'.__('release notes', MOZ_DOMAIN).'</a></p>';
+        $result .= '>poznámky k vydaniu</a></p>';
 
 				$result .= '<ul>
 					<li class="ico-win"><a href="'.htmlspecialchars($prod->download_win).'">Windows <small>(.exe)</small></a> ('.$prod->velkwin.' МB)</li>
@@ -188,8 +159,8 @@ function get_napisali($pocet = 15, $sidebar = 0) {
           echo '</small></p>';
          */ 
 		echo '<br/><br/><div class="navigation">';
-			if (($celkom/ 15)+1>$paged) { echo '<div class="alignleft"><a href="/napisali/page/'; echo $paged+1 .'/">&laquo;'; __('Oldest articles', MOZ_DOMAIN); echo '</a></div>'; }
-			if ($paged>1) { echo '<div class="alignright"><a href="/napisali/page/'; echo $paged-1 .'/">'; __('Newest articles', MOZ_DOMAIN); echo '&raquo;</a></div>';}
+			if (($celkom/ 15)+1>$paged) { echo '<div class="alignleft"><a href="/napisali/page/'; echo $paged+1 .'/">&laquo; Staršie články</a></div>'; }
+			if ($paged>1) { echo '<div class="alignright"><a href="/napisali/page/'; echo $paged-1 .'/">Novšie články &raquo;</a></div>';}
 		echo '</div>';
          
           }	
@@ -197,7 +168,7 @@ function get_napisali($pocet = 15, $sidebar = 0) {
 	else
 	{
 
-		echo '<div class="error">'.__('At this moment there are no articles in this category.', MOZ_DOMAIN).'</div>';
+		echo '<div class="error">Momentálne nie sú v tejto rubrike dostupné žiadne články.</div>';
 	}
 
 }
@@ -234,8 +205,11 @@ function mskcms_PanelProdukty()
 			case 'pridat-ver-ok':
 				require_once("form-pridat-ver-ok.php");
 				break;
+      case 'last_ver_ok':
+				require_once("form-last_ver_ok.php");
+				break;
 			default:
-				echo '<p>'.__('I dont know what to do.', MOZ_DOMAIN).'</p>';
+				echo '<p>Neviem, čo mám robiť.</p>';
 				break;
 		}
 	}
@@ -274,7 +248,7 @@ function mskcms_PanelNapisali()
 				break;
 
 			default:
-				echo '<p>'.__('I dont know what to do.', MOZ_DOMAIN).'</p>';
+				echo '<p>Neviem, čo mám robiť.</p>';
 				break;
 		}
 	}
@@ -288,8 +262,8 @@ function mskcms_PanelNapisali()
 
 function mskcms_AddOptionsPage() {
 	if (function_exists('add_submenu_page')) {
-		add_submenu_page('plugins.php', __('Products', MOZ_DOMAIN), __('Products', MOZ_DOMAIN), 3, basename(__FILE__), 'mskcms_PanelProdukty'); 
-		add_submenu_page('plugins.php', __('Articles about Mozilla', MOZ_DOMAIN), __('Articles about Mozilla', MOZ_DOMAIN), 1, 'napisali.php','mskcms_PanelNapisali');
+		add_submenu_page('plugins.php', 'Produkty', 'Produkty', 3, basename(__FILE__), 'mskcms_PanelProdukty'); 
+		add_submenu_page('plugins.php', 'Napísali o Mozille', 'Napísali o Mozille', 1, 'napisali.php','mskcms_PanelNapisali');
 	}		
 }
 
@@ -338,28 +312,35 @@ function mskcms_Install()
 		dbDelta($sql);
 	//	$wpdb->query($sql);
 	}
-}
-
-function localization_init() {
-	if ( function_exists('load_plugin_textdomain') ) {
-		if ( !defined('WP_PLUGIN_DIR') ) {			
-			load_plugin_textdomain( MOZ_DOMAIN );
-			load_plugin_textdomain( MOZ_DOMAIN, str_replace( ABSPATH, '', dirname(__FILE__) ) . '/languages' );
-		} else {
-			load_plugin_textdomain( MOZ_DOMAIN, true );
-			load_plugin_textdomain( MOZ_DOMAIN, false, dirname( plugin_basename(__FILE__) ) . '/languages' );
-		}
+  
+  $table_name = 'mozsk_last_produkty';
+  //id | name | last_version | last_check | check_url | check_variable | new_version
+	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
+	{
+		$sql = "CREATE TABLE `$table_name` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(30) default NULL, 
+  `last_version` varchar(20) default NULL,
+  `last_check` date default NULL,
+  `check_url` varchar(200) default NULL,
+  `check_variable` varchar(50) default NULL, 
+  `new_version` varchar(20) default NULL,
+  PRIMARY KEY (`id`) );";
+		require_once(ABSPATH . '/wp-admin/upgrade-functions.php');
+		dbDelta($sql);
+	//	$wpdb->query($sql);
 	}
 }
 
-
 function mskcms_AddAdminJS() 
 {
+	if($_SERVER['SCRIPT_NAME'] == '/wp-admin/plugins.php' && ($_GET['page'] == basename(__FILE__)) || $_GET['page'] == 'napisali.php' || $_GET['page'] == 'ocakavane.php')
+	{
 		echo '<script type="text/javascript">
 //<![CDATA[
 function mskcms_AskDel(id)
 {
-	answer = window.confirm("'; echo __('Do you really want to delete this version?', MOZ_DOMAIN); echo '");
+	answer = window.confirm("Naozaj odstrániť túto verziu? Pozor, po stlačení OK ihneď maže!");
 	if(answer)
 	{
 		document.getElementById("todo").value = "zmazat-ok";
@@ -382,16 +363,61 @@ function mskcms_NuVer(id)
 	document.getElementById("ok-submit").click();
 }
 
+
+
 //]]>
 </script>';
+	}
+	//echo '<!-- ' . $_SERVER['SCRIPT_NAME'] . ' -->';
 }
 
-add_action('init', 'localization_init');
-add_action('plugins_loaded','mskcms_Install');
 add_action('admin_menu', 'mskcms_AddOptionsPage');
 add_action('admin_head', 'mskcms_AddAdminJS');
+add_action('activate_mozsk-produkty/mozsk-produkty.php','mskcms_Install');
 
-add_shortcode('moz-download-rn', 'moz_download_rn_handler');
-add_shortcode('moz-download-version', 'moz_download_version_handler');
-add_shortcode('moz-download-url', 'moz_download_url_handler');
+//kontrola novych verzii
+if (!wp_next_scheduled('my_daily_function_hook')) {
+  wp_schedule_event( time(), 'daily', 'my_daily_function_hook' );
+}
+add_action( 'my_daily_function_hook', 'my_daily_function' );
+
+function my_daily_function() { 
+  global $wpdb;
+  //$to_err = "cron run: ";
+
+  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, check_url, check_variable FROM mozsk_last_produkty WHERE 1 ORDER BY id DESC");
+	if ($temp_prod) {
+    $user_info = get_userdatabylogin('mazarik');
+	  $str_mail = 'Hello ' . $user_info->display_name . '!\n';
+    $subj_mail = "";
+    $send = 0;
+		foreach ($temp_prod as $prod) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $prod->check_url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      $json_tmp = curl_exec($ch);
+      curl_close($ch);      
+      //$to_err .= $json_tmp;
+      if ($json_tmp) {
+        $json_de = json_decode($json_tmp, true);
+        //$to_err .= $prod->check_variable . ' = ' . $json_de['' . $prod->check_variable] . '\n';
+        $wpdb->query('UPDATE mozsk_last_produkty SET new_version="' . $json_de[$prod->check_variable] . '",last_check=CURRENT_DATE() WHERE id=' . $prod->id);
+        if ($json_de[$prod->check_variable] != $prod->last_version) {
+          $send = 1;
+          if ($user_info) {
+            $subj_mail .= ' New version of ' . $prod->name;
+            $str_mail .= 'There is new version of ' . $prod->name . '.';
+            $str_mail .= ' It has changed from ' . $prod->last_version . ' to ' . $json_de[$prod->check_variable] . '.';
+          }
+        }
+      }
+		}
+    if ($send == 1) {
+      $str_mail .= ' Do a upgrade soon!\n Best Regards,\nyour wordpress cron.\n';
+      $message_headers = '';
+      @wp_mail($user_info->user_email, $subj_mail, $str_mail, $message_headers);
+    }
+	}
+  //error_log($to_err);
+}
 ?>

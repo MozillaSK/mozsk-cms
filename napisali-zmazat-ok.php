@@ -6,7 +6,7 @@ if (isset($_POST['param1']))
 }
 ?>
 <div class="updated">
-	<p><strong><?php echo __('Article was deleted.', MOZ_DOMAIN) ?></strong></p>
+	<p><strong>Článok zmazaný.</strong></p>
 </div>
 <?php
 require_once("napisali.php");

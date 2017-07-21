@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $uprav_id = $_POST['param1'];
 $urlid = $wpdb->escape($_POST['urlid']);
 $nazov = $wpdb->escape($_POST['nazov']);
@@ -34,7 +34,7 @@ WHERE id = '$uprav_id'");
 
 ?>
 <div class="updated">
-	<p><strong><?php echo __('Product was updated.', MOZ_DOMAIN) ?> (ID=<?php echo $uprav_id ?>)</strong></p>
+	<p><strong>Produkt upravený. (ID=<?php echo $uprav_id ?>)</strong></p>
 </div>
 <?php
 require_once("form-zoznam.php");
