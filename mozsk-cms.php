@@ -76,6 +76,11 @@ function get_dlpage($produkt) {
 
 }
 
+function get_dlpage_shortcode($atts) {
+	get_dlpage($atts['produkt']);
+}
+add_shortcode( 'get-dlpage', 'get_dlpage_shortcode' );
+
 function get_archiv($produkt) {
 
   	global $wpdb;
