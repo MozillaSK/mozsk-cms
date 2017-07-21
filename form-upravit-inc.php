@@ -7,9 +7,9 @@ function fill_version() {
                 "seamonkey":{"win": "SeaMonkey", "lin": "seamonkey", "mac": "SeaMonkey"}
               };
   if (urlid == 'seamonkey') {
-    document.getElementById('changelog').value = 'http://www.seamonkey-project.org/releases/' + urlid + version + '/'; 
+    document.getElementById('changelog').value = 'httsp://www.seamonkey-project.org/releases/' + urlid + version + '/'; 
   } else {
-    document.getElementById('changelog').value = 'http://www.mozilla.com/sk/' + urlid + '/' + version + '/releasenotes/';
+    document.getElementById('changelog').value = 'https://www.mozilla.com/sk/' + urlid + '/' + version + '/releasenotes/';
   }
   document.getElementById('download_win').value = 'ftp://ftp.mozilla.org/pub/' + urlid + '/releases/' + version + '/win32/sk/' + prefix[urlid]["win"] + '%20Setup%20' + version + '.exe';
   document.getElementById('download_lin').value = 'ftp://ftp.mozilla.org/pub/' + urlid + '/releases/' + version + '/linux-i686/sk/' + prefix[urlid]["lin"] + '-' + version + '.tar.bz2';

@@ -34,7 +34,7 @@ function get_newprodukt($produkt, $what) {
        if ($os == "lin") {
          $os = $os . 'ux';
        }
-       $link = "http://download.mozilla.org/?product=$produkt-$result&os=$os&lang=sk";
+       $link = "https://download.mozilla.org/?product=$produkt-$result&os=$os&lang=sk";
      }
 	   return htmlspecialchars($link);
   	}
