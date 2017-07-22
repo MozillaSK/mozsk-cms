@@ -121,9 +121,11 @@ function get_archiv($produkt) {
 
 }
 
-function get_napisali($pocet = 15, $sidebar = 0) {
+function get_napisali_content($pocet = 15, $sidebar = 0) {
 
   	global $wpdb;
+
+  $result = '';
 
   $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
   
@@ -140,47 +142,47 @@ function get_napisali($pocet = 15, $sidebar = 0) {
 		foreach ($napisali as $clanok) 
 		{
 		if ($sidebar == 1) {
-			echo '<p><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
-			if ($clanok->server != '-') echo $clanok->server.': ';
-			echo $clanok->nazov.'</a><br/>';
-			echo htmlspecialchars($clanok->excerpt);
-			echo '</p>';
+			$result .= '<p><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
+			if ($clanok->server != '-') $result .= $clanok->server.': ';
+			$result .= $clanok->nazov.'</a><br/>';
+			$result .= htmlspecialchars($clanok->excerpt);
+			$result .= '</p>';
 		}
 		else {
-			echo '<h4><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
-			if ($clanok->server != '-') echo $clanok->server.': ';
-			echo $clanok->nazov.'</a> <small>('.date("d.m.Y",strtotime($clanok->datum)).')</small></h4>';
-			echo '<div>'.$clanok->excerpt;
-			echo '</div>';
+			$result .= '<h4><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
+			if ($clanok->server != '-') $result .= $clanok->server.': ';
+			$result .= $clanok->nazov.'</a> <small>('.date("d.m.Y",strtotime($clanok->datum)).')</small></h4>';
+			$result .= '<div>'.$clanok->excerpt;
+			$result .= '</div>';
 		}
   	}
 
-    if (($pocet>=15) && ($sidebar == 0)) { /*
-          echo '<br/><p class="center"><small>';
-            
-          if ($paged>1) {
-              echo '<a href="/napisali/page/'; echo $paged-1 .'/">&laquo; predchádzajúca</a> | ';}
-          echo 'stránka <span class="tucne black">';
-          echo $paged .'</span> z <span class="tucne black">'. (bcdiv($celkom,15,0)+1) .'</span>';
-          if (bcdiv($celkom,15,0)+1>$paged) {
-              echo ' | <a href="/napisali/page/'; echo $paged+1 .'/">ďalšia &raquo;</a>';
-              }
-          echo '</small></p>';
-         */ 
-		echo '<br/><br/><div class="navigation">';
-			if (($celkom/ 15)+1>$paged) { echo '<div class="alignleft"><a href="/napisali/page/'; echo $paged+1 .'/">&laquo; Staršie články</a></div>'; }
-			if ($paged>1) { echo '<div class="alignright"><a href="/napisali/page/'; echo $paged-1 .'/">Novšie články &raquo;</a></div>';}
-		echo '</div>';
+    if (($pocet>=15) && ($sidebar == 0)) {
+		$result .= '<br/><br/><div class="navigation">';
+			if (($celkom/ 15)+1>$paged) { $result .= '<div class="alignleft"><a href="/napisali/page/'; $result .= $paged+1 .'/">&laquo; Staršie články</a></div>'; }
+			if ($paged>1) { $result .= '<div class="alignright"><a href="/napisali/page/'; $result .= $paged-1 .'/">Novšie články &raquo;</a></div>';}
+		$result .= '</div>';
          
           }	
 	}
 	else
 	{
 
-		echo '<div class="error">Momentálne nie sú v tejto rubrike dostupné žiadne články.</div>';
+		$result .= '<div class="error">Momentálne nie sú v tejto rubrike dostupné žiadne články.</div>';
 	}
 
+	return $result;
+
 }
+
+function get_napisali($pocet = 15, $sidebar = 0) {
+	echo get_napisali_content($pocet, $sidebar);
+}
+
+function get_napisali_shortcode($atts) {
+	return get_napisali_content($atts['pocet'], $atts['sidebar']);
+}
+add_shortcode( 'get-napisali', 'get_napisali_shortcode' );
 
 class Napisali_Widget extends WP_Widget {
 
