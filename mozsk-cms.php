@@ -182,6 +182,39 @@ function get_napisali($pocet = 15, $sidebar = 0) {
 
 }
 
+class Napisali_Widget extends WP_Widget {
+
+	/**
+	 * Sets up the widgets name etc
+	 */
+	public function __construct() {
+		$widget_ops = array(
+			'classname' => 'napisali_widget',
+			'description' => '',
+		);
+		parent::__construct( 'napisali_widget', 'Napísali o Mozille', $widget_ops );
+	}
+
+	/**
+	 * Outputs the content of the widget
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 */
+	public function widget( $args, $instance ) {
+		echo '<div class="infopanel-top"><div class="infopanel-bottom">';
+		echo '<div class="nadpis"><img src="/wp-content/themes/mozillask/images/napisali.png" alt="Napísali o Mozille" /></div>';
+		echo '<div class="infopanel male">';
+		get_napisali(3,1);
+		echo '<br/><span class="alignright tucne"><a href="/napisali/">Ďalšie články &raquo;</a></span><br/>';
+		echo '</div>';
+		echo '</div></div>';
+	}
+}
+add_action( 'widgets_init', function(){
+	register_widget( 'Napisali_Widget' );
+});
+
 function mskcms_PanelProdukty() 
 {
 	global $wpdb;
