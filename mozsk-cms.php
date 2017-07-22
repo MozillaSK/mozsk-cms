@@ -203,7 +203,7 @@ class Napisali_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		echo '<div class="infopanel-top"><div class="infopanel-bottom">';
-		echo '<div class="nadpis"><img src="/wp-content/themes/mozillask/images/napisali.png" alt="Napísali o Mozille" /></div>';
+		echo '<div class="nadpis">Napísali o Mozille</div>';
 		echo '<div class="infopanel male">';
 		get_napisali(3,1);
 		echo '<br/><span class="alignright tucne"><a href="/napisali/">Ďalšie články &raquo;</a></span><br/>';
