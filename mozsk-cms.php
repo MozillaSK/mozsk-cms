@@ -85,7 +85,7 @@ function get_dlpage_shortcode($atts) {
 }
 add_shortcode( 'get-dlpage', 'get_dlpage_shortcode' );
 
-function get_archiv($produkt) {
+function get_archiv_content($produkt) {
 
   	global $wpdb;
 	
@@ -109,8 +109,6 @@ function get_archiv($produkt) {
 					<li class="ico-win"><a href="'.htmlspecialchars($prod->download_win).'">Windows <small>(.exe)</small></a> ('.$prod->velkwin.' МB)</li>
 					<li class="ico-lin"><a href="'.htmlspecialchars($prod->download_lin).'">Linux</a> <small>(.tar.gz)</small> ('.$prod->velklin.' МB)</li>
 					<li class="ico-mac"><a href="'.htmlspecialchars($prod->download_mac).'">Mac OS</a> <small>(.dmg)</small> ('.$prod->velkmac.' МB)</li>';
-		
-		/*		if (($prod->download_port != "" ) && (file_exists($prod->download_port))) $result .=	'<li class="ico-win"><a href="'.htmlspecialchars($prod->download_port).'">Portable* verzia <small>(.zip)</small></a> ('.$prod->velkport.' МB)</li>';*/
 
 			$result .= '</ul></div>';
 		}
@@ -120,6 +118,15 @@ function get_archiv($produkt) {
 	echo $result;
 
 }
+
+function get_archiv($produkt) {
+	echo get_archiv_content($produkt);
+}
+
+function get_archiv_shortcode($atts) {
+	return get_archiv_content($atts['produkt']);
+}
+add_shortcode( 'get-archiv', 'get_archiv_shortcode' );
 
 function get_napisali_content($pocet = 15, $sidebar = 0) {
 
