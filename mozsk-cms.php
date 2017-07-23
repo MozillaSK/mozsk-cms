@@ -42,6 +42,54 @@ function get_newprodukt($produkt, $what) {
 	return htmlspecialchars($result);
 }
 
+class Download_Widget extends WP_Widget {
+
+	/**
+	 * Sets up the widgets name etc
+	 */
+	public function __construct() {
+		$widget_ops = array(
+			'classname' => 'download_widget',
+			'description' => '',
+		);
+		parent::__construct( 'download_widget', 'Aktuálne verzie', $widget_ops );
+	}
+
+	/**
+	 * Outputs the content of the widget
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 */
+	public function widget( $args, $instance ) {
+		echo '<div class="infopanel-top"><div class="infopanel-bottom">';
+		if (strstr($_SERVER["HTTP_USER_AGENT"],"Mac")) { $os='mac'; $os_name='Mac OS'; }
+		elseif (strstr($_SERVER["HTTP_USER_AGENT"],"Linux")) { $os='lin'; $os_name='Linux'; }
+		else { $os='win'; $os_name='Windows'; }
+		echo '<div class="nadpis">Aktuálne verzie<br>pre '.$os_name.'</div>';
+		echo '<div class="infopanel verzie">';
+		echo '<p><img src="/wp-content/images/logo/firefox35/firefox-36.png" alt="Firefox" />
+			<a href="'.get_newprodukt('firefox','link').'">Firefox</a><br/><b>'.get_newprodukt('firefox','verzia').'</b></p>';
+
+		echo '<p><img src="/wp-content/images/logo/tb3_36.png" alt="Thunderbird" />
+			<a href="'.get_newprodukt('thunderbird','link').'">Thunderbird</a><br/><b>'.get_newprodukt('thunderbird','verzia').'</b></p>';
+
+		echo '<p><img src="/wp-content/images/logo/lightning-64.png" alt="Lightning" />
+			<a href="'.get_newprodukt('lightning','link').'">Lightning</a><br/><b>'.get_newprodukt('lightning','verzia').'</b></p>';
+
+		echo '<p><img src="/wp-content/images/logo/seamonkey34.png" alt="SeaMonkey" />
+			<a href="'.get_newprodukt('seamonkey','link').'">SeaMonkey</a><br/><b>'.get_newprodukt('seamonkey','verzia').'</b></p>';
+
+		echo '<small class="alignright tucne"><a href="/download/">Ďalšie verzie &raquo;</a></small>';
+		echo '<br/>';
+		echo '</div>';
+		echo '</div></div>';
+	}
+}
+add_action( 'widgets_init', function(){
+	register_widget( 'Download_Widget' );
+});
+
 function get_dlpage_content($produkt) {
 
   	global $wpdb;
