@@ -7,7 +7,7 @@ else $server = $server_iny;
 $odkaz = $wpdb->escape($_POST['odkaz']);
 $excerpt = $_POST['excerpt'];
 
-$wpdb->query("INSERT INTO mozsk_napisali
+$wpdb->query("INSERT INTO ".$wpdb->prefix."napisali
 (
 nazov, datum, server, odkaz, excerpt
 ) VALUES (

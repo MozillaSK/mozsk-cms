@@ -3,7 +3,7 @@
 if (isset($_POST['param1'])) 
 {
 	$uprav_id = $_POST['param1'];
-	$produkt = $wpdb->get_row("SELECT * FROM mozsk_produkty WHERE id='$uprav_id'");
+	$produkt = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."produkty WHERE id='$uprav_id'");
 	if($produkt)
 	{
 		$urlid = htmlspecialchars($produkt->urlid, ENT_QUOTES);

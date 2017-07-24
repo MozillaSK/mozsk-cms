@@ -16,7 +16,7 @@
 	<tbody>
 <?php
 	$r = 0;
-	$produkty = $wpdb->get_results("SELECT nazov, id, verzia, datum, poznamka, download_win, download_lin, download_mac, download_port, changelog FROM mozsk_produkty ORDER BY nazov ASC, id DESC");
+	$produkty = $wpdb->get_results("SELECT nazov, id, verzia, datum, poznamka, download_win, download_lin, download_mac, download_port, changelog FROM ".$wpdb->prefix."produkty ORDER BY nazov ASC, id DESC");
 	if($produkty)
 	{
 		foreach ($produkty as $produkt) 
@@ -82,7 +82,7 @@ function mskcms_OK_new_version(id) {
 	</thead>
 	<tbody>
 <?php
-  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, last_check, new_version FROM mozsk_last_produkty WHERE 1 ORDER BY id ASC");
+  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, last_check, new_version FROM ".$wpdb->prefix."last_produkty WHERE 1 ORDER BY id ASC");
   $result = "";
 	if ($temp_prod) {
     $r = -1;

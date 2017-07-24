@@ -15,7 +15,7 @@ $download_port = $wpdb->escape($_POST['download_port']);
 $velkport = $wpdb->escape($_POST['velkport']);
 $poznamka = $_POST['poznamka'];
 
-$wpdb->query("UPDATE mozsk_produkty SET
+$wpdb->query("UPDATE ".$wpdb->prefix."produkty SET
 urlid = '$urlid',
 nazov = '$nazov',
 datum = '$datum',

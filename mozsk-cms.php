@@ -14,7 +14,7 @@ function get_newprodukt($produkt, $what) {
   	global $wpdb;
   	
     $result = $wpdb->get_var("SELECT verzia 
-      FROM mozsk_produkty 
+      FROM ".$wpdb->prefix."produkty 
       WHERE urlid = '$produkt' 
       ORDER by id DESC
 /*        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
@@ -26,7 +26,7 @@ function get_newprodukt($produkt, $what) {
   	 $os='win';
   	   if (strstr($agent,"Mac")) $os='mac'; elseif (strstr($agent,"Linux")) $os='lin';
      if ($produkt == "mozilla-sunbird") {
-  	   $link = $wpdb->get_var("SELECT download_$os FROM mozsk_produkty WHERE urlid='$produkt' AND verzia='$result'");
+  	   $link = $wpdb->get_var("SELECT download_$os FROM ".$wpdb->prefix."produkty WHERE urlid='$produkt' AND verzia='$result'");
      } else {
        if ($os == "mac") {
          $os = "osx";
@@ -96,7 +96,7 @@ function get_dlpage_content($produkt) {
   	
   	$result='<p><strong>Verzia: ';
   	$temp_prod = $wpdb->get_row("SELECT verzia, datum, changelog, download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport 
-      FROM mozsk_produkty 
+      FROM ".$wpdb->prefix."produkty 
       WHERE urlid='$produkt' 
       ORDER BY 
         LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
@@ -115,7 +115,7 @@ function get_dlpage_content($produkt) {
 		
 /*	if ($temp_prod->download_port != "" ) $result .=	'<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_port).'">Portable* verzia <small>(.zip)</small></a> ('.$temp_prod->velkport.' МB)</li>';
 	  else {
-		  	$temp_port = $wpdb->get_row("SELECT verzia, download_port,velkport FROM mozsk_produkty WHERE urlid='$produkt' AND download_port != '' ORDER BY id DESC LIMIT 1");
+		  	$temp_port = $wpdb->get_row("SELECT verzia, download_port,velkport FROM ".$wpdb->prefix."produkty WHERE urlid='$produkt' AND download_port != '' ORDER BY id DESC LIMIT 1");
 		  	if  ($temp_port) $result .= '<li class="ico-win"><a href="'.htmlspecialchars($temp_port->download_port).'">Portable* verzia '.$temp_port->verzia.' <small>(.zip)</small></a> ('.$temp_port->velkport.' МB)</li>';
 	  }*/
 	$result .= '</ul>';
@@ -138,7 +138,7 @@ function get_archiv_content($produkt) {
   	global $wpdb;
 	
   	$temp_prod = $wpdb->get_results("SELECT verzia, nazov, datum, changelog, download_win, velkwin,
-			download_lin,velklin,download_mac,velkmac,download_port,velkport FROM mozsk_produkty WHERE urlid='$produkt' ORDER BY id DESC");
+			download_lin,velklin,download_mac,velkmac,download_port,velkport FROM ".$wpdb->prefix."produkty WHERE urlid='$produkt' ORDER BY id DESC");
 	if ($temp_prod) {
 		
 		$prvy = 1;
@@ -188,8 +188,8 @@ function get_napisali_content($pocet = 15, $sidebar = 0) {
 
   $limit = ($pocet < 15) ? "LIMIT $pocet" : "LIMIT $temp, 15";
   
-  $celkom = $wpdb->get_var("SELECT count(id) FROM mozsk_napisali");
-  $napisali = $wpdb->get_results("SELECT id, nazov, datum, odkaz, server, excerpt FROM mozsk_napisali
+  $celkom = $wpdb->get_var("SELECT count(id) FROM ".$wpdb->prefix."napisali");
+  $napisali = $wpdb->get_results("SELECT id, nazov, datum, odkaz, server, excerpt FROM ".$wpdb->prefix."napisali
 										GROUP BY nazov ORDER BY id DESC $limit");
 
 	if($napisali)
@@ -371,7 +371,7 @@ function mskcms_Install()
 {
 	global $wpdb;
 	
-	$table_name = 'mozsk_produkty';
+	$table_name = $wpdb->prefix.'produkty';
 	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
 	{
 		$sql = "CREATE TABLE `$table_name` (
@@ -396,7 +396,7 @@ function mskcms_Install()
 	//	$wpdb->query($sql);
 	}
 
-	$table_name = 'mozsk_napisali';
+	$table_name = $wpdb->prefix.'napisali';
 	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
 	{
 		$sql = "CREATE TABLE `$table_name` (
@@ -412,7 +412,7 @@ function mskcms_Install()
 	//	$wpdb->query($sql);
 	}
   
-  $table_name = 'mozsk_last_produkty';
+  $table_name = $wpdb->prefix.'last_produkty';
   //id | name | last_version | last_check | check_url | check_variable | new_version
 	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
 	{
@@ -484,7 +484,7 @@ function my_daily_function() {
   global $wpdb;
   //$to_err = "cron run: ";
 
-  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, check_url, check_variable FROM mozsk_last_produkty WHERE 1 ORDER BY id DESC");
+  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, check_url, check_variable FROM ".$wpdb->prefix."last_produkty WHERE 1 ORDER BY id DESC");
 	if ($temp_prod) {
     $user_info = get_userdatabylogin('mazarik');
 	  $str_mail = 'Hello ' . $user_info->display_name . '!\n';
@@ -500,7 +500,7 @@ function my_daily_function() {
       if ($json_tmp) {
         $json_de = json_decode($json_tmp, true);
         //$to_err .= $prod->check_variable . ' = ' . $json_de['' . $prod->check_variable] . '\n';
-        $wpdb->query('UPDATE mozsk_last_produkty SET new_version="' . $json_de[$prod->check_variable] . '",last_check=CURRENT_DATE() WHERE id=' . $prod->id);
+        $wpdb->query('UPDATE '.$wpdb->prefix.'last_produkty SET new_version="' . $json_de[$prod->check_variable] . '",last_check=CURRENT_DATE() WHERE id=' . $prod->id);
         if ($json_de[$prod->check_variable] != $prod->last_version) {
           $send = 1;
           if ($user_info) {

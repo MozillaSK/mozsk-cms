@@ -2,7 +2,7 @@
 if (isset($_POST['param1'])) 
 {
 	$zmaz_id = $_POST['param1'];
-	$wpdb->query("DELETE FROM mozsk_produkty WHERE id = '$zmaz_id'");
+	$wpdb->query("DELETE FROM ".$wpdb->prefix."produkty WHERE id = '$zmaz_id'");
 }
 ?>
 <div class="updated">

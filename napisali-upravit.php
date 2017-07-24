@@ -3,7 +3,7 @@
 if (isset($_POST['param1'])) 
 {
 	$uprav_id = $_POST['param1'];
-	$clanok = $wpdb->get_row("SELECT * FROM mozsk_napisali WHERE id='$uprav_id'");
+	$clanok = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."napisali WHERE id='$uprav_id'");
 	if($clanok)
 	{
 		$nazov = htmlspecialchars($clanok->nazov, ENT_QUOTES);

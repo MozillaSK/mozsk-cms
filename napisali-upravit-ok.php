@@ -8,7 +8,7 @@ else $server = $server_iny;
 $odkaz = $wpdb->escape($_POST['odkaz']);
 $excerpt = $_POST['excerpt'];
 
-$wpdb->query("UPDATE mozsk_napisali SET
+$wpdb->query("UPDATE ".$wpdb->prefix."napisali SET
 nazov = '$nazov',
 datum = '$datum',
 server = '$server',

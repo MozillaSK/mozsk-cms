@@ -14,7 +14,7 @@
 	<tbody>
 <?php
 	$r = 0;
-	$napisali = $wpdb->get_results("SELECT nazov, id, odkaz, datum, server, excerpt FROM mozsk_napisali ORDER BY id DESC limit 20");
+	$napisali = $wpdb->get_results("SELECT nazov, id, odkaz, datum, server, excerpt FROM ".$wpdb->prefix."napisali ORDER BY id DESC limit 20");
 	if($napisali)
 	{
 		foreach ($napisali as $clanok) 

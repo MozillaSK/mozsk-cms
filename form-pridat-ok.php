@@ -14,7 +14,7 @@ $download_port = $wpdb->escape($_POST['download_port']);
 $velkport = $wpdb->escape($_POST['velkport']);
 $poznamka = $_POST['poznamka'];
 
-$wpdb->query("INSERT INTO mozsk_produkty
+$wpdb->query("INSERT INTO ".$wpdb->prefix."produkty
 (
 urlid, nazov, datum, verzia, changelog,
 download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport,
