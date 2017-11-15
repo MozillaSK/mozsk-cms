@@ -68,7 +68,7 @@ class Download_Widget extends WP_Widget {
 		else { $os='win'; $os_name='Windows'; }
 		echo '<div class="nadpis">Aktuálne verzie<br>pre '.$os_name.'</div>';
 		echo '<div class="infopanel verzie">';
-		echo '<p><img src="/wp-content/images/logo/firefox35/firefox-36.png" alt="Firefox" />
+		echo '<p><img src="/wp-content/images/logo/firefox.png" style="max-width: 36px;" alt="Firefox" />
 			<a href="'.get_newprodukt('firefox','link').'">Firefox</a><br/><b>'.get_newprodukt('firefox','verzia').'</b></p>';
 
 		echo '<p><img src="/wp-content/images/logo/tb3_36.png" alt="Thunderbird" />
