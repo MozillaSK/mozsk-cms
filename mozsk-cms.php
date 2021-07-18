@@ -223,7 +223,7 @@ function mskcms_PanelProdukty()
 
 function mskcms_AddOptionsPage() {
 	if (function_exists('add_submenu_page')) {
-		add_submenu_page('plugins.php', 'Produkty', 'Produkty', 3, basename(__FILE__), 'mskcms_PanelProdukty');
+		add_menu_page('Produkty', 'Produkty', 3, basename(__FILE__), 'mskcms_PanelProdukty');
 	}
 }
 
@@ -294,7 +294,7 @@ function mskcms_Install()
 
 function mskcms_AddAdminJS()
 {
-	if($_SERVER['SCRIPT_NAME'] == '/wp-admin/plugins.php' && ($_GET['page'] == basename(__FILE__)) || $_GET['page'] == 'ocakavane.php')
+	if($_SERVER['SCRIPT_NAME'] == '/wp-admin/admin.php' && ($_GET['page'] == basename(__FILE__)))
 	{
 		echo '<script type="text/javascript">
 //<![CDATA[
