@@ -68,16 +68,16 @@ class Download_Widget extends WP_Widget {
 		else { $os='win'; $os_name='Windows'; }
 		echo '<div class="nadpis">Aktuálne verzie<br>pre '.$os_name.'</div>';
 		echo '<div class="infopanel verzie">';
-		echo '<p><img src="/wp-content/images/logo/firefox.png" style="max-width: 36px;" alt="Firefox" />
+		echo '<p><img src="/wp-content/plugins/mozsk-cms/firefox.png" style="max-width: 36px;" alt="Firefox" />
 			<a href="'.get_newprodukt('firefox','link').'">Firefox</a><br/><b>'.get_newprodukt('firefox','verzia').'</b></p>';
 
-		echo '<p><img src="/wp-content/images/logo/tb3_36.png" alt="Thunderbird" />
+		echo '<p><img src="/wp-content/plugins/mozsk-cms/tb3_36.png" alt="Thunderbird" />
 			<a href="'.get_newprodukt('thunderbird','link').'">Thunderbird</a><br/><b>'.get_newprodukt('thunderbird','verzia').'</b></p>';
 
-		echo '<p><img src="/wp-content/images/logo/lightning-64.png" alt="Lightning" />
+		echo '<p><img src="/wp-content/plugins/mozsk-cms/lightning-64.png" alt="Lightning" />
 			<a href="'.get_newprodukt('lightning','link').'">Lightning</a><br/><b>'.get_newprodukt('lightning','verzia').'</b></p>';
 
-		echo '<p><img src="/wp-content/images/logo/seamonkey34.png" alt="SeaMonkey" />
+		echo '<p><img src="/wp-content/plugins/mozsk-cms/seamonkey34.png" alt="SeaMonkey" />
 			<a href="'.get_newprodukt('seamonkey','link').'">SeaMonkey</a><br/><b>'.get_newprodukt('seamonkey','verzia').'</b></p>';
 
 		echo '<small class="alignright tucne"><a href="/download/">Ďalšie verzie &raquo;</a></small>';

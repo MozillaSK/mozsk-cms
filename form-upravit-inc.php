@@ -40,23 +40,23 @@ function fill_version() {
 	</tr>
 	<tr>
 		<td><label for="changelog">Changelog</label></td>
-		<td><input id="changelog" name="changelog" type="text" size="82" value="<?php echo $changelog; ?>" />&nbsp;<img onclick="document.getElementById('changelog').value=''" src="/wp-content/plugins/mozsk-rozsirenia/zmaz.png" alt="zmazat" /></td>
+		<td><input id="changelog" name="changelog" type="text" size="82" value="<?php echo $changelog; ?>" />&nbsp;<img onclick="document.getElementById('changelog').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /></td>
 	</tr>
 	<tr>
 		<td><label for="download_win">Windows</label></td>
-		<td><input name="download_win" type="text" id="download_win" size="82" value="<?php echo $download_win; ?>" />&nbsp;<img onclick="document.getElementById('download_win').value=''" src="/wp-content/plugins/mozsk-rozsirenia/zmaz.png" alt="zmazat" /> <input id="velkwin" name="velkwin" type="text" size="4" value="<?php echo $velkwin; ?>" /> MB</td>
+		<td><input name="download_win" type="text" id="download_win" size="82" value="<?php echo $download_win; ?>" />&nbsp;<img onclick="document.getElementById('download_win').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /> <input id="velkwin" name="velkwin" type="text" size="4" value="<?php echo $velkwin; ?>" /> MB</td>
 	</tr>
 	<tr>
 		<td><label for="download_lin">Linux</label></td>
-		<td><input name="download_lin" type="text" id="download_lin" size="82" value="<?php echo $download_lin; ?>" />&nbsp;<img onclick="document.getElementById('download_lin').value=''" src="/wp-content/plugins/mozsk-rozsirenia/zmaz.png" alt="zmazat" /> <input id="velklin" name="velklin" type="text" size="4" value="<?php echo $velklin; ?>" /> MB</td>
+		<td><input name="download_lin" type="text" id="download_lin" size="82" value="<?php echo $download_lin; ?>" />&nbsp;<img onclick="document.getElementById('download_lin').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /> <input id="velklin" name="velklin" type="text" size="4" value="<?php echo $velklin; ?>" /> MB</td>
 	</tr>
 	<tr>
 		<td><label for="download_mac">Mac OS</label></td>
-		<td><input name="download_mac" type="text" id="download_mac" size="82" value="<?php echo $download_mac; ?>" />&nbsp;<img onclick="document.getElementById('download_mac').value=''" src="/wp-content/plugins/mozsk-rozsirenia/zmaz.png" alt="zmazat" /> <input id="velkmac" name="velkmac" type="text" size="4" value="<?php echo $velkmac; ?>" /> MB</td>
+		<td><input name="download_mac" type="text" id="download_mac" size="82" value="<?php echo $download_mac; ?>" />&nbsp;<img onclick="document.getElementById('download_mac').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /> <input id="velkmac" name="velkmac" type="text" size="4" value="<?php echo $velkmac; ?>" /> MB</td>
 	</tr>
 	<tr>
 		<td><label for="download_port">Portable</label></td>
-		<td><input name="download_port" type="text" id="download_port" size="82" value="<?php echo $download_port; ?>" />&nbsp;<img onclick="document.getElementById('download_port').value=''" src="/wp-content/plugins/mozsk-rozsirenia/zmaz.png" alt="zmazat" /> <input id="velkport" name="velkport" type="text" size="4" value="<?php echo $velkport; ?>" /> MB</td>
+		<td><input name="download_port" type="text" id="download_port" size="82" value="<?php echo $download_port; ?>" />&nbsp;<img onclick="document.getElementById('download_port').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /> <input id="velkport" name="velkport" type="text" size="4" value="<?php echo $velkport; ?>" /> MB</td>
 	</tr>
 	<tr>
 		<td></td><td><input type="button" class="button" onclick="fill_version()" value="Vyplň" /> (musí byť vyplnené pole Verzia !!)  

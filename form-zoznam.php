@@ -31,10 +31,10 @@
 			echo "<td>{$produkt->nazov}</td>";
 			echo "<td style=\"text-align:center\">{$produkt->verzia}</td>";
 			echo "<td style=\"text-align:center\">$datum</td>";
-			echo '<td width="20">'; if ($produkt->download_win) echo '<a href="'.htmlspecialchars($produkt->download_win).'"><img src="/wp-content/images/logo/win_small.png" alt="Windows" /></a>'; echo '</td>';
-			echo '<td width="20">'; if ($produkt->download_lin) echo '<a href="'.htmlspecialchars($produkt->download_lin).'"><img src="/wp-content/images/logo/lin_small.png" alt="Linux" /></a>'; echo '</td>';
-			echo '<td width="20">'; if ($produkt->download_mac) echo '<a href="'.htmlspecialchars($produkt->download_mac).'"><img src="/wp-content/images/logo/mac_small.png" alt="Mac OS" /></a>'; echo '</td>';
-			echo '<td width="20">'; if ($produkt->download_port) echo '<a href="'.htmlspecialchars($produkt->download_port).'"><img src="/wp-content/plugins/mozsk-rozsirenia/portable.png" alt="Portable" /></a>'; echo '</td>';
+			echo '<td width="20">'; if ($produkt->download_win) echo '<a href="'.htmlspecialchars($produkt->download_win).'"><img src="/wp-content/plugins/mozsk-cms/win_small.png" alt="Windows" /></a>'; echo '</td>';
+			echo '<td width="20">'; if ($produkt->download_lin) echo '<a href="'.htmlspecialchars($produkt->download_lin).'"><img src="/wp-content/plugins/mozsk-cms/lin_small.png" alt="Linux" /></a>'; echo '</td>';
+			echo '<td width="20">'; if ($produkt->download_mac) echo '<a href="'.htmlspecialchars($produkt->download_mac).'"><img src="/wp-content/plugins/mozsk-cms/mac_small.png" alt="Mac OS" /></a>'; echo '</td>';
+			echo '<td width="20">'; if ($produkt->download_port) echo '<a href="'.htmlspecialchars($produkt->download_port).'"><img src="/wp-content/plugins/mozsk-cms/portable.png" alt="Portable" /></a>'; echo '</td>';
 			echo '<td width="20">'; if ($produkt->changelog) echo '<a href="'.$produkt->changelog.'"><img src="/mozilla-16.png" alt="Changelog" /></a>'; echo '</td>';
 			echo '<td>'.$produkt->poznamka.'</td>';
 			echo '<td><a href="#" class="edit" onclick="mskcms_Edit('.$produkt->id.')">Upraviť</a></td>';
