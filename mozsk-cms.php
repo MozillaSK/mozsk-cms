@@ -11,7 +11,7 @@ Author URI: http://www.wladow.sk
 function get_newprodukt($produkt, $what) {
 	global $wpdb;
 
-	$verzia = $wpdb->get_var($wpdb->prepare("SELECT verzia FROM ".$wpdb->prefix."produkty WHERE urlid = %s ORDER by id DESC", $produkt));
+	$verzia = $wpdb->get_var($wpdb->prepare("SELECT verzia FROM ".$wpdb->prefix."produkty WHERE urlid = %s ORDER BY id DESC", $produkt));
 	if ($what == 'link') {
 		$agent = $_SERVER["HTTP_USER_AGENT"];
 		$os = 'win';
@@ -87,13 +87,10 @@ function get_dlpage_content($produkt) {
 
 	$temp_prod = $wpdb->get_row(
 		$wpdb->prepare(
-			"SELECT verzia, datum, changelog, download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport
+			"SELECT verzia, datum, changelog, download_win, download_lin, download_mac, download_port
 				FROM ".$wpdb->prefix."produkty
 				WHERE urlid=%s
-				ORDER BY
-					LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC,
-					REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC,
-					LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC
+				ORDER BY id DESC
 				LIMIT 1",
 				$produkt
 		)
@@ -107,14 +104,12 @@ function get_dlpage_content($produkt) {
 
 	return '
 		<p>
-			<strong>Verzia: '.$temp_prod->verzia.'</strong>
-			<br/>
-			Vydané: '.date("d.m.Y",strtotime($temp_prod->datum)).' - <a href="'.htmlspecialchars($temp_prod->changelog).'" '. $hreflang .'>poznámky k vydaniu</a>
+			<strong>Verzia: '.$temp_prod->verzia.'</strong> - <a href="'.htmlspecialchars($temp_prod->changelog).'" '. $hreflang .'>poznámky k vydaniu</a>
 		</p>
 		<ul>
-			<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_win).'">Windows <small>(.exe)</small></a> ('.htmlspecialchars($temp_prod->velkwin).' МB)</li>
-			<li class="ico-lin"><a href="'.htmlspecialchars($temp_prod->download_lin).'">Linux</a> <small>(.tar.gz)</small> ('.htmlspecialchars($temp_prod->velklin).' МB)</li>
-			<li class="ico-mac"><a href="'.htmlspecialchars($temp_prod->download_mac).'">Mac OS</a> <small>(.dmg)</small> ('.htmlspecialchars($temp_prod->velkmac).' МB)</li>
+			<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_win).'">Windows <small>(.exe)</small></a></li>
+			<li class="ico-lin"><a href="'.htmlspecialchars($temp_prod->download_lin).'">Linux</a> <small>(.tar.gz)</small></li>
+			<li class="ico-mac"><a href="'.htmlspecialchars($temp_prod->download_mac).'">Mac OS</a> <small>(.dmg)</small></li>
 		</ul>
 	';
 }
@@ -133,7 +128,7 @@ function get_archiv_content($produkt) {
 
 	$temp_prod = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT verzia, nazov, datum, changelog, download_win, velkwin, download_lin,velklin,download_mac,velkmac,download_port,velkport FROM ".$wpdb->prefix."produkty WHERE urlid=%s ORDER BY id DESC",
+			"SELECT verzia, nazov, datum, changelog, download_win, download_lin, download_mac, download_port FROM ".$wpdb->prefix."produkty WHERE urlid=%s ORDER BY id DESC",
 			$produkt
 		)
 	);
@@ -162,9 +157,9 @@ function get_archiv_content($produkt) {
 						vydané: '.date("d.m.Y",strtotime($prod->datum)).' - <a href="'.htmlspecialchars($prod->changelog).'"'.$hreflang.'>poznámky k vydaniu</a>
 					</p>
 					<ul>
-						<li class="ico-win"><a href="'.htmlspecialchars($prod->download_win).'">Windows <small>(.exe)</small></a> ('.htmlspecialchars($prod->velkwin).' МB)</li>
-						<li class="ico-lin"><a href="'.htmlspecialchars($prod->download_lin).'">Linux</a> <small>(.tar.gz)</small> ('.htmlspecialchars($prod->velklin).' МB)</li>
-						<li class="ico-mac"><a href="'.htmlspecialchars($prod->download_mac).'">Mac OS</a> <small>(.dmg)</small> ('.htmlspecialchars($prod->velkmac).' МB)</li>
+						<li class="ico-win"><a href="'.htmlspecialchars($prod->download_win).'">Windows <small>(.exe)</small></a></li>
+						<li class="ico-lin"><a href="'.htmlspecialchars($prod->download_lin).'">Linux</a> <small>(.tar.gz)</small></li>
+						<li class="ico-mac"><a href="'.htmlspecialchars($prod->download_mac).'">Mac OS</a> <small>(.dmg)</small></li>
 					</ul>
 				</div>
 			';
