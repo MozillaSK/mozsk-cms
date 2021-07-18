@@ -16,22 +16,11 @@ function get_newprodukt($produkt, $what) {
 		$agent = $_SERVER["HTTP_USER_AGENT"];
 		$os = 'win';
 		if (strstr($agent, "Mac")) {
-			$os = 'mac';
+			$os = "osx";
 		} elseif (strstr($agent, "Linux")) {
-			$os = 'lin';
+			$os = "linux";
 		}
-		if ($produkt == "mozilla-sunbird") {
-			$link = $wpdb->get_var($wpdb->prepare("SELECT download_".$os." FROM ".$wpdb->prefix."produkty WHERE urlid=%s AND verzia=%s", $produkt, $verzia));
-		} else {
-			if ($os == "mac") {
-				$os = "osx";
-			}
-			if ($os == "lin") {
-				$os = "linux";
-			}
-			$link = "https://download.mozilla.org/?product=$produkt-$verzia&os=$os&lang=sk";
-		}
-		return htmlspecialchars($link);
+		return htmlspecialchars("https://download.mozilla.org/?product=$produkt-$verzia&os=$os&lang=sk");
 	} else {
 		return htmlspecialchars($verzia);
 	}
