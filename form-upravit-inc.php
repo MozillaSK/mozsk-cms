@@ -2,19 +2,17 @@
 	function fill_version() {
 		const urlid = document.getElementById('urlid').value;
 		const version = document.getElementById('verzia').value;
-		const prefix = {
-			"firefox":{"win": "Firefox", "lin": "firefox", "mac": "Firefox"},
-			"thunderbird":{"win": "Thunderbird", "lin": "thunderbird", "mac": "Thunderbird"},
-			"seamonkey":{"win": "SeaMonkey", "lin": "seamonkey", "mac": "SeaMonkey"},
-		};
 		if (urlid == 'seamonkey') {
-			document.getElementById('changelog').value = 'httsp://www.seamonkey-project.org/releases/' + urlid + version + '/';
+			document.getElementById('changelog').value = 'https://www.seamonkey-project.org/releases/' + urlid + version + '/';
+			document.getElementById('download_win').value = 'https://archive.mozilla.org/pub/' + urlid + '/releases/' + version + '/win64/sk/' + urlid + '-' + version + '.sk.win64.installer.exe';
+			document.getElementById('download_lin').value = 'https://archive.mozilla.org/pub/' + urlid + '/releases/' + version + '/linux-x86_64/sk/' + urlid + '-' + version + '.sk.linux-x86_64.tar.bz2';
+			document.getElementById('download_mac').value = 'https://archive.mozilla.org/pub/' + urlid + '/releases/' + version + '/mac/sk/' + urlid + '-' + version + '.sk.mac.dmg';
 		} else {
 			document.getElementById('changelog').value = 'https://www.mozilla.com/sk/' + urlid + '/' + version + '/releasenotes/';
+			document.getElementById('download_win').value = 'https://download.mozilla.org/?product=' + urlid + '-' + version + '&os=win64&lang=sk';
+			document.getElementById('download_lin').value = 'https://download.mozilla.org/?product=' + urlid + '-' + version + '&os=linux64&lang=sk';
+			document.getElementById('download_mac').value = 'https://download.mozilla.org/?product=' + urlid + '-' + version + '&os=osx&lang=sk';
 		}
-		document.getElementById('download_win').value = 'ftp://ftp.mozilla.org/pub/' + urlid + '/releases/' + version + '/win32/sk/' + prefix[urlid]["win"] + '%20Setup%20' + version + '.exe';
-		document.getElementById('download_lin').value = 'ftp://ftp.mozilla.org/pub/' + urlid + '/releases/' + version + '/linux-i686/sk/' + prefix[urlid]["lin"] + '-' + version + '.tar.bz2';
-		document.getElementById('download_mac').value = 'ftp://ftp.mozilla.org/pub/' + urlid + '/releases/' + version + '/mac/sk/' + prefix[urlid]["mac"] + '%20' + version + '.dmg';
 	}
 </script>
 
