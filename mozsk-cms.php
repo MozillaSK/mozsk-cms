@@ -12,13 +12,13 @@ Author URI: http://www.wladow.sk
 function get_newprodukt($produkt, $what) {
 
   	global $wpdb;
-  	
-    $result = $wpdb->get_var("SELECT verzia 
-      FROM ".$wpdb->prefix."produkty 
-      WHERE urlid = '$produkt' 
+
+    $result = $wpdb->get_var("SELECT verzia
+      FROM ".$wpdb->prefix."produkty
+      WHERE urlid = '$produkt'
       ORDER by id DESC
-/*        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
-        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC, 
+/*        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC,
+        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC,
         LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC */
       ");
   	if ($what == 'link' ) {
@@ -90,15 +90,15 @@ add_action( 'widgets_init', function(){
 function get_dlpage_content($produkt) {
 
   	global $wpdb;
-  	
+
   	$result='<p><strong>Verzia: ';
-  	$temp_prod = $wpdb->get_row("SELECT verzia, datum, changelog, download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport 
-      FROM ".$wpdb->prefix."produkty 
-      WHERE urlid='$produkt' 
-      ORDER BY 
-        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC, 
-        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC, 
-        LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC 
+  	$temp_prod = $wpdb->get_row("SELECT verzia, datum, changelog, download_win, velkwin, download_lin, velklin, download_mac, velkmac, download_port, velkport
+      FROM ".$wpdb->prefix."produkty
+      WHERE urlid='$produkt'
+      ORDER BY
+        LPAD(REPLACE(SUBSTRING(verzia, 1, 2), '.', ''), 5, '0') DESC,
+        REPLACE(SUBSTRING(verzia, 3,2), '.', '') DESC,
+        LPAD(REPLACE(SUBSTRING(verzia, 5), '.', '0'), 5, '0') DESC
       LIMIT 1");
 	$result .= $temp_prod->verzia.'</strong><br/>';
 	$result .= 'Vydané: '.date("d.m.Y",strtotime($temp_prod->datum)).' - <a href="'.$temp_prod->changelog.'"';
@@ -109,7 +109,7 @@ function get_dlpage_content($produkt) {
 		<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_win).'">Windows <small>(.exe)</small></a> ('.$temp_prod->velkwin.' МB)</li>
 		<li class="ico-lin"><a href="'.htmlspecialchars($temp_prod->download_lin).'">Linux</a> <small>(.tar.gz)</small> ('.$temp_prod->velklin.' МB)</li>
 		<li class="ico-mac"><a href="'.htmlspecialchars($temp_prod->download_mac).'">Mac OS</a> <small>(.dmg)</small> ('.$temp_prod->velkmac.' МB)</li>';
-		
+
 /*	if ($temp_prod->download_port != "" ) $result .=	'<li class="ico-win"><a href="'.htmlspecialchars($temp_prod->download_port).'">Portable* verzia <small>(.zip)</small></a> ('.$temp_prod->velkport.' МB)</li>';
 	  else {
 		  	$temp_port = $wpdb->get_row("SELECT verzia, download_port,velkport FROM ".$wpdb->prefix."produkty WHERE urlid='$produkt' AND download_port != '' ORDER BY id DESC LIMIT 1");
@@ -133,18 +133,18 @@ add_shortcode( 'get-dlpage', 'get_dlpage_shortcode' );
 function get_archiv_content($produkt) {
 
   	global $wpdb;
-	
+
   	$temp_prod = $wpdb->get_results("SELECT verzia, nazov, datum, changelog, download_win, velkwin,
 			download_lin,velklin,download_mac,velkmac,download_port,velkport FROM ".$wpdb->prefix."produkty WHERE urlid='$produkt' ORDER BY id DESC");
 	if ($temp_prod) {
-		
+
 		$prvy = 1;
 		$result = "";
-		
+
 		foreach ($temp_prod as $prod) {
-			
+
 			if ($prvy==1) { $result .= '<div class="arch '.$produkt.'_arch">'; $prvy=0;} else $result .= '<div class="arch">';
-			
+
 			    $result .= '<h1><a href="/'.$produkt.'/">'.$prod->nazov.' '.$prod->verzia.'</a></h1>';
 				$result .= '<p class="description">vydané: '.date("d.m.Y",strtotime($prod->datum)).' - <a href="'.$prod->changelog.'"';
         if (strpos($prod->changelog,'/sk/') == 0) $result .= ' hreflang="en"';
@@ -157,7 +157,7 @@ function get_archiv_content($produkt) {
 
 			$result .= '</ul></div>';
 		}
-			
+
 	}
 
 	echo $result;
@@ -173,108 +173,12 @@ function get_archiv_shortcode($atts) {
 }
 add_shortcode( 'get-archiv', 'get_archiv_shortcode' );
 
-function get_napisali_content($pocet = 15, $sidebar = 0) {
-
-  	global $wpdb;
-
-  $result = '';
-
-  $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-  
-  $temp = ($paged*($pocet)-$pocet);
-
-  $limit = ($pocet < 15) ? "LIMIT $pocet" : "LIMIT $temp, 15";
-  
-  $celkom = $wpdb->get_var("SELECT count(id) FROM ".$wpdb->prefix."napisali");
-  $napisali = $wpdb->get_results("SELECT id, nazov, datum, odkaz, server, excerpt FROM ".$wpdb->prefix."napisali
-										GROUP BY nazov ORDER BY id DESC $limit");
-
-	if($napisali)
-	{
-		foreach ($napisali as $clanok) 
-		{
-		if ($sidebar == 1) {
-			$result .= '<p><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
-			if ($clanok->server != '-') $result .= $clanok->server.': ';
-			$result .= $clanok->nazov.'</a><br/>';
-			$result .= htmlspecialchars($clanok->excerpt);
-			$result .= '</p>';
-		}
-		else {
-			$result .= '<h4><a href="'.htmlspecialchars($clanok->odkaz).'" target="_blank">';
-			if ($clanok->server != '-') $result .= $clanok->server.': ';
-			$result .= $clanok->nazov.'</a> <small>('.date("d.m.Y",strtotime($clanok->datum)).')</small></h4>';
-			$result .= '<div>'.$clanok->excerpt;
-			$result .= '</div>';
-		}
-  	}
-
-    if (($pocet>=15) && ($sidebar == 0)) {
-		$result .= '<br/><br/><div class="navigation">';
-			if (($celkom/ 15)+1>$paged) { $result .= '<div class="alignleft"><a href="/napisali/page/'; $result .= $paged+1 .'/">&laquo; Staršie články</a></div>'; }
-			if ($paged>1) { $result .= '<div class="alignright"><a href="/napisali/page/'; $result .= $paged-1 .'/">Novšie články &raquo;</a></div>';}
-		$result .= '</div>';
-         
-          }	
-	}
-	else
-	{
-
-		$result .= '<div class="error">Momentálne nie sú v tejto rubrike dostupné žiadne články.</div>';
-	}
-
-	return $result;
-
-}
-
-function get_napisali($pocet = 15, $sidebar = 0) {
-	echo get_napisali_content($pocet, $sidebar);
-}
-
-function get_napisali_shortcode($atts) {
-	return get_napisali_content($atts['pocet'], $atts['sidebar']);
-}
-add_shortcode( 'get-napisali', 'get_napisali_shortcode' );
-
-class Napisali_Widget extends WP_Widget {
-
-	/**
-	 * Sets up the widgets name etc
-	 */
-	public function __construct() {
-		$widget_ops = array(
-			'classname' => 'napisali_widget',
-			'description' => '',
-		);
-		parent::__construct( 'napisali_widget', 'Napísali o Mozille', $widget_ops );
-	}
-
-	/**
-	 * Outputs the content of the widget
-	 *
-	 * @param array $args
-	 * @param array $instance
-	 */
-	public function widget( $args, $instance ) {
-		echo '<div class="infopanel-top"><div class="infopanel-bottom">';
-		echo '<div class="nadpis">Napísali o Mozille</div>';
-		echo '<div class="infopanel male">';
-		get_napisali(3,1);
-		echo '<br/><span class="alignright tucne"><a href="/napisali/">Ďalšie články &raquo;</a></span><br/>';
-		echo '</div>';
-		echo '</div></div>';
-	}
-}
-add_action( 'widgets_init', function(){
-	register_widget( 'Napisali_Widget' );
-});
-
-function mskcms_PanelProdukty() 
+function mskcms_PanelProdukty()
 {
 	global $wpdb;
 
 	echo '<div class="wrap">';
-	if (isset($_POST['todo'])) 
+	if (isset($_POST['todo']))
 	{
 		$todo = $_POST['todo'];
 		//echo "todo: $todo";
@@ -312,62 +216,22 @@ function mskcms_PanelProdukty()
 	else
 	{
 		require_once("form-zoznam.php");
-	} 
-	echo "</div>";
-}
-
-function mskcms_PanelNapisali() 
-{
-	global $wpdb;
-
-	echo '<div class="wrap">';
-	if (isset($_POST['todo'])) 
-	{
-		$todo = $_POST['todo'];
-		//echo "todo: $todo";
-		switch($todo)
-		{
-			case 'pridat':
-				require_once("napisali-pridat.php");
-				break;
-			case 'pridat-ok':
-				require_once("napisali-pridat-ok.php");
-				break;
-			case 'zmazat-ok':
-				require_once("napisali-zmazat-ok.php");
-				break;
-			case 'upravit':
-				require_once("napisali-upravit.php");
-				break;
-			case 'upravit-ok':
-				require_once("napisali-upravit-ok.php");
-				break;
-
-			default:
-				echo '<p>Neviem, čo mám robiť.</p>';
-				break;
-		}
 	}
-	else
-	{
-		require_once("napisali.php");
-	} 
 	echo "</div>";
 }
 
 
 function mskcms_AddOptionsPage() {
 	if (function_exists('add_submenu_page')) {
-		add_submenu_page('plugins.php', 'Produkty', 'Produkty', 3, basename(__FILE__), 'mskcms_PanelProdukty'); 
-		add_submenu_page('plugins.php', 'Napísali o Mozille', 'Napísali o Mozille', 1, 'napisali.php','mskcms_PanelNapisali');
-	}		
+		add_submenu_page('plugins.php', 'Produkty', 'Produkty', 3, basename(__FILE__), 'mskcms_PanelProdukty');
+	}
 }
 
 
 function mskcms_Install()
 {
 	global $wpdb;
-	
+
 	$table_name = $wpdb->prefix.'produkty';
 	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
 	{
@@ -393,33 +257,33 @@ function mskcms_Install()
 	//	$wpdb->query($sql);
 	}
 
-	$table_name = $wpdb->prefix.'napisali';
-	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
-	{
-		$sql = "CREATE TABLE `$table_name` (
-  `id` int(11) NOT NULL auto_increment,
-  `nazov` varchar(200) default NULL,
-  `datum` date default NULL,
-  `odkaz` varchar(200) default NULL,
-  `server` varchar(50) default NULL,
-  `excerpt` text,
-  PRIMARY KEY (`id`) );";
-		require_once(ABSPATH . '/wp-admin/upgrade-functions.php');
-		dbDelta($sql);
-	//	$wpdb->query($sql);
-	}
-  
+	// $table_name = $wpdb->prefix.'napisali';
+	// if($wpdb->get_var("show tables like '$table_name'") != $table_name)
+	// {
+	// 	$sql = "CREATE TABLE `$table_name` (
+  // `id` int(11) NOT NULL auto_increment,
+  // `nazov` varchar(200) default NULL,
+  // `datum` date default NULL,
+  // `odkaz` varchar(200) default NULL,
+  // `server` varchar(50) default NULL,
+  // `excerpt` text,
+  // PRIMARY KEY (`id`) );";
+	// 	require_once(ABSPATH . '/wp-admin/upgrade-functions.php');
+	// 	dbDelta($sql);
+	// //	$wpdb->query($sql);
+	// }
+
   $table_name = $wpdb->prefix.'last_produkty';
   //id | name | last_version | last_check | check_url | check_variable | new_version
 	if($wpdb->get_var("show tables like '$table_name'") != $table_name)
 	{
 		$sql = "CREATE TABLE `$table_name` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(30) default NULL, 
+  `name` varchar(30) default NULL,
   `last_version` varchar(20) default NULL,
   `last_check` date default NULL,
   `check_url` varchar(200) default NULL,
-  `check_variable` varchar(50) default NULL, 
+  `check_variable` varchar(50) default NULL,
   `new_version` varchar(20) default NULL,
   PRIMARY KEY (`id`) );";
 		require_once(ABSPATH . '/wp-admin/upgrade-functions.php');
@@ -428,9 +292,9 @@ function mskcms_Install()
 	}
 }
 
-function mskcms_AddAdminJS() 
+function mskcms_AddAdminJS()
 {
-	if($_SERVER['SCRIPT_NAME'] == '/wp-admin/plugins.php' && ($_GET['page'] == basename(__FILE__)) || $_GET['page'] == 'napisali.php' || $_GET['page'] == 'ocakavane.php')
+	if($_SERVER['SCRIPT_NAME'] == '/wp-admin/plugins.php' && ($_GET['page'] == basename(__FILE__)) || $_GET['page'] == 'ocakavane.php')
 	{
 		echo '<script type="text/javascript">
 //<![CDATA[
@@ -477,7 +341,7 @@ if (!wp_next_scheduled('my_daily_function_hook')) {
 }
 add_action( 'my_daily_function_hook', 'my_daily_function' );
 
-function my_daily_function() { 
+function my_daily_function() {
   global $wpdb;
   //$to_err = "cron run: ";
 
@@ -492,7 +356,7 @@ function my_daily_function() {
       curl_setopt($ch, CURLOPT_URL, $prod->check_url);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
       $json_tmp = curl_exec($ch);
-      curl_close($ch);      
+      curl_close($ch);
       //$to_err .= $json_tmp;
       if ($json_tmp) {
         $json_de = json_decode($json_tmp, true);
