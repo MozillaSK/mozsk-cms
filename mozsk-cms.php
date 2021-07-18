@@ -74,9 +74,6 @@ class Download_Widget extends WP_Widget {
 		echo '<p><img src="/wp-content/plugins/mozsk-cms/tb3_36.png" alt="Thunderbird" />
 			<a href="'.get_newprodukt('thunderbird','link').'">Thunderbird</a><br/><b>'.get_newprodukt('thunderbird','verzia').'</b></p>';
 
-		echo '<p><img src="/wp-content/plugins/mozsk-cms/lightning-64.png" alt="Lightning" />
-			<a href="'.get_newprodukt('lightning','link').'">Lightning</a><br/><b>'.get_newprodukt('lightning','verzia').'</b></p>';
-
 		echo '<p><img src="/wp-content/plugins/mozsk-cms/seamonkey34.png" alt="SeaMonkey" />
 			<a href="'.get_newprodukt('seamonkey','link').'">SeaMonkey</a><br/><b>'.get_newprodukt('seamonkey','verzia').'</b></p>';
 
