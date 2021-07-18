@@ -210,9 +210,6 @@ function mskcms_PanelProdukty() {
 			case 'pridat-ver-ok':
 				require_once("form-pridat-ver-ok.php");
 				break;
-      case 'last_ver_ok':
-				require_once("form-last_ver_ok.php");
-				break;
 			default:
 				echo '<p>Neviem, čo mám robiť.</p>';
 				break;
@@ -308,48 +305,5 @@ function mskcms_AddAdminJS() {
 add_action('admin_menu', 'mskcms_AddOptionsPage');
 add_action('admin_head', 'mskcms_AddAdminJS');
 add_action('activate_mozsk-produkty/mozsk-produkty.php','mskcms_Install');
-
-if (!wp_next_scheduled('my_daily_function_hook')) {
-  wp_schedule_event( time(), 'daily', 'my_daily_function_hook' );
-}
-add_action( 'my_daily_function_hook', 'my_daily_function' );
-
-function my_daily_function() {
-  global $wpdb;
-
-	$send_to_user = 'mazarik';
-
-  $temp_prod = $wpdb->get_results("SELECT id, name, last_version, check_url, check_variable FROM ".$wpdb->prefix."last_produkty WHERE 1 ORDER BY id DESC");
-	if ($temp_prod) {
-    $user_info = get_userdatabylogin($send_to_user);
-	  $str_mail = 'Hello ' . $user_info->display_name . '!\n';
-    $subj_mail = "";
-    $send = 0;
-		foreach ($temp_prod as $prod) {
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $prod->check_url);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      $json_tmp = curl_exec($ch);
-      curl_close($ch);
-      if ($json_tmp) {
-        $json_de = json_decode($json_tmp, true);
-        $wpdb->query('UPDATE '.$wpdb->prefix.'last_produkty SET new_version="' . $json_de[$prod->check_variable] . '",last_check=CURRENT_DATE() WHERE id=' . $prod->id);
-        if ($json_de[$prod->check_variable] != $prod->last_version) {
-          $send = 1;
-          if ($user_info) {
-            $subj_mail .= ' New version of ' . $prod->name;
-            $str_mail .= 'There is new version of ' . $prod->name . '.';
-            $str_mail .= ' It has changed from ' . $prod->last_version . ' to ' . $json_de[$prod->check_variable] . '.';
-          }
-        }
-      }
-		}
-    if ($send == 1) {
-      $str_mail .= ' Do a upgrade soon!\n Best Regards,\nyour wordpress cron.\n';
-      $message_headers = '';
-      @wp_mail($user_info->user_email, $subj_mail, $str_mail, $message_headers);
-    }
-	}
-}
 
 ?>
