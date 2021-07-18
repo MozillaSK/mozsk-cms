@@ -38,6 +38,9 @@
 			<td colspan="2"><h3>Download</h3></td>
 		</tr>
 		<tr>
+			<td></td><td><input type="button" class="button" onclick="fill_version()" value="Vyplň" /> (musí byť vyplnené pole Verzia !!)
+		</tr>
+		<tr>
 			<td><label for="changelog">Changelog</label></td>
 			<td><input id="changelog" name="changelog" type="text" size="82" value="<?php echo $changelog; ?>" />&nbsp;<img onclick="document.getElementById('changelog').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /></td>
 		</tr>
@@ -56,9 +59,6 @@
 		<tr>
 			<td><label for="download_port">Portable</label></td>
 			<td><input name="download_port" type="text" id="download_port" size="82" value="<?php echo $download_port; ?>" />&nbsp;<img onclick="document.getElementById('download_port').value=''" src="/wp-content/plugins/mozsk-cms/zmaz.png" alt="zmazat" /> <input id="velkport" name="velkport" type="text" size="4" value="<?php echo $velkport; ?>" /> MB</td>
-		</tr>
-		<tr>
-			<td></td><td><input type="button" class="button" onclick="fill_version()" value="Vyplň" /> (musí byť vyplnené pole Verzia !!)
 		</tr>
 		<tr>
 			<td colspan="2"><h3>Iné</h3></td>
