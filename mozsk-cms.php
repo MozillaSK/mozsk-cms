@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Mozilla.sk CMS Plugin
-Plugin URI: https://www.mozilla.sk
+Plugin URI: https://github.com/MozillaSK/mozsk-cms
 Description: CMS plugin pre stránky Mozilla.sk
 Author: wladow
-Version: 0.5.6
+Version: 0.6.0
 Author URI: http://www.wladow.sk
 */
 
@@ -58,9 +58,10 @@ class Download_Widget extends WP_Widget {
 		}
 
 		echo '
-			<div class="infopanel-top"><div class="infopanel-bottom">
+			<div class="infopanel-top"></div>
+			<div class="infopanel">
 				<div class="nadpis">Aktuálne verzie<br>pre '.$os_name.'</div>
-				<div class="infopanel verzie">
+				<div class="verzie">
 					<p>
 						<img src="/wp-content/plugins/mozsk-cms/firefox.png" style="max-width: 36px;" alt="Firefox" /><a href="'.get_newprodukt('firefox','link').'">Firefox</a><br/><b>'.get_newprodukt('firefox','verzia').'</b>
 					</p>
@@ -73,7 +74,8 @@ class Download_Widget extends WP_Widget {
 					<small class="alignright tucne"><a href="/download/">Ďalšie verzie &raquo;</a></small>
 					<br/>
 				</div>
-			</div></div>
+			</div>
+			<div class="infopanel-bottom"></div>
 		';
 	}
 }
