@@ -5,7 +5,7 @@ Plugin URI: https://github.com/MozillaSK/mozsk-cms
 Update URI: https://api.github.com/repos/MozillaSK/mozsk-cms/releases/latest
 Description: CMS plugin pre stránky Mozilla.sk
 Author: wladow
-Version: 0.6.0
+Version: 0.6.1
 Author URI: http://www.wladow.sk
 */
 
